@@ -50,6 +50,9 @@ COPY --from=builder /app/.next/static ./.next/static
 # Copy public assets from the builder stage
 COPY --from=builder /app/public ./public
 
+# Create cache directory and set proper permissions
+RUN mkdir -p /app/.next/cache && chown -R nextjs:nodejs /app
+
 # Set correct permissions for the non-root user
 USER nextjs
 

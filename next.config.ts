@@ -12,6 +12,7 @@ const nextConfig: NextConfig = {
     // your project has type errors.
     ignoreBuildErrors: true,
   },
+  output: 'standalone',
   images: {
     remotePatterns: [
       {

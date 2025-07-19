@@ -30,7 +30,25 @@ This guide provides step-by-step instructions for deploying your application to 
 6.  **Configure Environment Variables:**
     - Go to the "Environment Variables" tab.
     - Add all the necessary environment variables for your application. This includes database connection strings, API keys, and any other secrets required for your application to run.
+    - **Important:** Make sure to check the "Available during build time?" option for each variable, as the `next build` process requires them.
     - **Important:** Do not commit your `.env` file to the repository. All secrets should be managed through the Coolify UI.
+
+    ### Required Environment Variables
+    - `DATABASE_URL`: Your PostgreSQL connection string.
+    - `BETTER_AUTH_SECRET`: A secret key for Better Auth. You can generate one with `openssl rand -hex 32`.
+    - `NEXT_PUBLIC_APP_URL`: The public URL of your application (e.g., `https://firegeo.yourdomain.com`).
+    - `AUTUMN_SECRET_KEY`: Your Autumn secret key.
+
+    ### Optional Environment Variables
+    - `STRIPE_SECRET_KEY`
+    - `STRIPE_PUBLISHABLE_KEY`
+    - `STRIPE_WEBHOOK_SECRET`
+    - `RESEND_API_KEY`
+    - `OPENAI_API_KEY`
+    - `ANTHROPIC_API_KEY`
+    - `GOOGLE_GENERATIVE_AI_API_KEY`
+    - `PERPLEXITY_API_KEY`
+    - `FIRECRAWL_API_KEY`
 
 7.  **Deploy:**
     - Once you have configured the build, network, and environment variables, click the "Deploy" button.

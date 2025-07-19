@@ -38,6 +38,7 @@ This guide provides step-by-step instructions for deploying your application to 
     - `BETTER_AUTH_SECRET`: A secret key for Better Auth. You can generate one with `openssl rand -hex 32`.
     - `NEXT_PUBLIC_APP_URL`: The public URL of your application (e.g., `https://firegeo.yourdomain.com`).
     - `AUTUMN_SECRET_KEY`: Your Autumn secret key.
+    - `FIRECRAWL_API_KEY`: Your Firecrawl API key for web scraping.
 
     ### Optional Environment Variables
     - `STRIPE_SECRET_KEY`
@@ -48,7 +49,6 @@ This guide provides step-by-step instructions for deploying your application to 
     - `ANTHROPIC_API_KEY`
     - `GOOGLE_GENERATIVE_AI_API_KEY`
     - `PERPLEXITY_API_KEY`
-    - `FIRECRAWL_API_KEY`
 
 7.  **Deploy:**
     - Once you have configured the build, network, and environment variables, click the "Deploy" button.

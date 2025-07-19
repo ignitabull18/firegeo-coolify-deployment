@@ -1,53 +1,61 @@
 # Dockerfile
 
-# Builder stage
+# 1. Builder stage: Install all dependencies and build the application
 FROM node:20-slim AS builder
 
-# Set working directory
 WORKDIR /app
-
-# Install pnpm
 RUN npm install -g pnpm
 
-# Copy package.json and pnpm-lock.yaml
+# Copy dependency definition files
 COPY package.json pnpm-lock.yaml ./
 
-# Install dependencies with --prod flag for production
-# This ensures only production dependencies are installed in the final image
-RUN pnpm install --prod
+# Install all dependencies (including devDependencies)
+RUN pnpm install
 
-# Copy the rest of the application
+# Copy the rest of the application source code
 COPY . .
 
 # Build the application
-# The standalone output will be generated in the .next/standalone directory
 RUN pnpm build
 
-# Runner stage
+
+# 2. Production dependencies stage: Install only production dependencies
+FROM node:20-slim AS prod-deps
+
+WORKDIR /app
+RUN npm install -g pnpm
+
+# Copy dependency definition files
+COPY package.json pnpm-lock.yaml ./
+
+# Install only production dependencies
+RUN pnpm install --prod
+
+
+# 3. Runner stage: Create the final, minimal production image
 FROM node:20-slim AS runner
 
-# Set working directory
 WORKDIR /app
 
 # Create a non-root user for security
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Copy the standalone output from the builder stage
+# Copy production node_modules from the prod-deps stage
+COPY --from=prod-deps /app/node_modules ./node_modules
+# Copy the standalone application from the builder stage
 COPY --from=builder /app/.next/standalone ./
-# Copy the static assets
+# Copy static assets from the builder stage
 COPY --from=builder /app/.next/static ./.next/static
-# Copy the public assets
+# Copy public assets from the builder stage
 COPY --from=builder /app/public ./public
 
-# Set the correct permissions for the non-root user
+# Set correct permissions for the non-root user
 USER nextjs
 
-# Expose port 3000
 EXPOSE 3000
-
-# Set the HOSTNAME to allow connections from any IP
 ENV HOSTNAME "0.0.0.0"
+ENV PORT 3000
 
 # Start the application
 CMD ["node", "server.js"] 
